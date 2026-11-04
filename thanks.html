@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Kafka Bank</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Caveat:wght@500&display=swap">
+<style>
+:root{--bg:#f7f4ee;--surface:#fff;--ink:#14213d;--muted:#5b6475;--line:#e3ddd0;--accent:#9a7b2f;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root{--bg:#0e1424;--surface:#161e33;--ink:#ece8dd;--muted:#9aa3b8;--line:#263050;--accent:#c9a74e}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Old Standard TT",Georgia,"Times New Roman",serif;line-height:1.6}
+a{color:inherit}
+main{max-width:640px;margin:0 auto;padding:56px 24px 72px;text-align:center}
+h1{font-size:clamp(2rem,5vw,3rem);line-height:1.15;margin:0 0 12px}
+p{margin:0 0 16px}
+.muted{color:var(--muted);font-size:.95rem}
+.cert{margin:28px auto 24px;max-width:420px}
+.cert canvas{display:block;width:100%;height:auto;box-shadow:0 8px 22px rgba(0,0,0,.3)}
+.btn{display:inline-block;border:0;cursor:pointer;background:var(--accent);color:#fff;font:600 1.15rem "Old Standard TT",Georgia,serif;padding:12px 28px;border-radius:2px}
+.btn:disabled{opacity:.6;cursor:default}
+.err{color:#b3261e}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+<h1 id="t-title">Thank you</h1>
+<p id="status" class="muted">Verifying your payment…</p>
+<div id="ok" hidden>
+  <p id="t-lead">Your payment has been verified. Your certificate is ready.</p>
+  <div class="cert"><canvas id="cv" width="1024" height="1536" aria-label="Certificate"></canvas></div>
+  <button type="button" class="btn" id="dl">Download PDF</button>
+  <p class="muted" id="t-note" style="margin-top:20px">Keep this page address to download the certificate again.</p>
+</div>
+<p style="margin-top:32px"><a href="/" id="t-back">Back to Kafka Bank</a></p>
+</main>
+<script src="/assets/kb-pdf.js"></script>
+<script>
+(function(){
+var L={
+en:{title:'Thank you',loading:'Verifying your payment…',lead:'Your payment has been verified. Your certificate is ready.',dl:'Download PDF',note:'Keep this page address to download the certificate again.',back:'Back to Kafka Bank',bad:'This link is not valid.',unpaid:'We could not confirm this payment. If you have paid, please write to info@kafkabank.com.',fail:'Something went wrong. Please try again or write to info@kafkabank.com.'},
+de:{title:'Vielen Dank',loading:'Ihre Zahlung wird überprüft…',lead:'Ihre Zahlung wurde bestätigt. Ihr Zertifikat ist bereit.',dl:'PDF herunterladen',note:'Speichern Sie die Adresse dieser Seite, um das Zertifikat erneut herunterzuladen.',back:'Zurück zur Kafka Bank',bad:'Dieser Link ist nicht gültig.',unpaid:'Wir konnten diese Zahlung nicht bestätigen. Falls Sie bezahlt haben, schreiben Sie an info@kafkabank.com.',fail:'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder schreiben Sie an info@kafkabank.com.'},
+fr:{title:'Merci',loading:'Vérification de votre paiement…',lead:'Votre paiement a été vérifié. Votre certificat est prêt.',dl:'Télécharger le PDF',note:'Conservez l’adresse de cette page pour télécharger à nouveau le certificat.',back:'Retour à la Kafka Bank',bad:'Ce lien n’est pas valide.',unpaid:'Nous n’avons pas pu confirmer ce paiement. Si vous avez payé, écrivez à info@kafkabank.com.',fail:'Une erreur est survenue. Veuillez réessayer ou écrire à info@kafkabank.com.'},
+cs:{title:'Děkujeme',loading:'Ověřujeme platbu…',lead:'Platba byla ověřena. Váš certifikát je připraven.',dl:'Stáhnout PDF',note:'Adresu této stránky si uložte, certifikát si tak můžete stáhnout znovu.',back:'Zpět na Kafka Bank',bad:'Tento odkaz není platný.',unpaid:'Platbu se nepodařilo potvrdit. Pokud jste zaplatili, napište na info@kafkabank.com.',fail:'Něco se nepovedlo. Zkuste to znovu nebo napište na info@kafkabank.com.'}
+};
+var lang='en';
+try{var s=localStorage.getItem('kb-lang');if(s&&L[s])lang=s;else{var n=(navigator.language||'en').slice(0,2);if(L[n])lang=n}}catch(e){}
+var T=L[lang];document.documentElement.lang=lang;
+function $(id){return document.getElementById(id)}
+$('t-title').textContent=T.title;$('t-lead').textContent=T.lead;$('dl').textContent=T.dl;$('t-note').textContent=T.note;$('t-back').textContent=T.back;$('status').textContent=T.loading;
+function fail(msg){var st=$('status');st.textContent=msg;st.className='err'}
+
+var id=new URLSearchParams(location.search).get('session_id');
+if(!id){fail(T.bad);return}
+
+var cv=$('cv'),ctx=cv.getContext('2d'),data=null;
+function spaced(text,x,y,sp){var i,cx=x;for(i=0;i<text.length;i++){ctx.fillText(text[i],cx,y);cx+=ctx.measureText(text[i]).width+sp}}
+function width(text,sp){var w=0,i;for(i=0;i<text.length;i++)w+=ctx.measureText(text[i]).width+sp;return w}
+function draw(base,d){
+ ctx.globalCompositeOperation='source-over';
+ ctx.drawImage(base,0,0,1024,1536);
+ ctx.globalCompositeOperation='multiply';ctx.textBaseline='alphabetic';ctx.textAlign='left';
+ var hand='"Caveat","Segoe Script","Bradley Hand",cursive';
+ if(d.name){
+  var fs=58;ctx.font='500 '+fs+'px '+hand;
+  while(ctx.measureText(d.name).width>440&&fs>24){fs-=2;ctx.font='500 '+fs+'px '+hand}
+  ctx.fillStyle='#1f2a7a';ctx.textAlign='center';ctx.fillText(d.name,512,664);ctx.textAlign='left';
+ }
+ ctx.font='700 36px "Old Standard TT",Georgia,"Times New Roman",serif';
+ var a='KB \u2013 '+d.year+' \u2013 ',wa=width(a,4),wb=width(d.number,4),x0=514-(wa+wb)/2;
+ ctx.fillStyle='#151515';spaced(a,x0,1001,4);
+ ctx.fillStyle='#8b1a1a';spaced(d.number,x0+wa,1001,4);
+ ctx.font='500 46px '+hand;ctx.fillStyle='#1f2a7a';ctx.textAlign='center';ctx.fillText(d.date,335,1338);
+ ctx.globalCompositeOperation='source-over';
+}
+function loadImg(src){return new Promise(function(ok,no){var i=new Image();i.onload=function(){ok(i)};i.onerror=no;i.src=src})}
+
+fetch('/api/certificate?session_id='+encodeURIComponent(id),{cache:'no-store'})
+ .then(function(r){return r.json().then(function(j){return{status:r.status,body:j}})})
+ .then(function(r){
+   if(r.status===402||r.status===403){fail(T.unpaid);return}
+   if(r.status===400||r.status===404){fail(T.bad);return}
+   if(r.status!==200){fail(T.fail);return}
+   data=r.body;
+   var fonts=[];try{fonts=[document.fonts.load('500 46px Caveat'),document.fonts.load('700 36px "Old Standard TT"')]}catch(e){}
+   return Promise.all([loadImg('/assets/certificate-base.jpg'),Promise.all(fonts).catch(function(){})]).then(function(v){
+     draw(v[0],data);
+     $('status').hidden=true;$('ok').hidden=false;
+   });
+ })
+ .catch(function(){fail(T.fail)});
+
+$('dl').addEventListener('click',function(){
+ if(!data)return;
+ var btn=$('dl');btn.disabled=true;
+ cv.toBlob(function(blob){
+  blob.arrayBuffer().then(function(buf){
+   var pdf=window.kbBuildPdf(new Uint8Array(buf),1024,1536);
+   var url=URL.createObjectURL(new Blob([pdf],{type:'application/pdf'}));
+   var a=document.createElement('a');a.href=url;a.download='Kafka-Bank-Certificate-'+data.number+'.pdf';
+   document.body.appendChild(a);a.click();a.remove();
+   setTimeout(function(){URL.revokeObjectURL(url)},4000);
+   btn.disabled=false;
+  });
+ },'image/jpeg',0.92);
+});
+})();
+</script>
+</body>
+</html>
