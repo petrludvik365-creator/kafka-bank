@@ -51,8 +51,19 @@ export async function onRequestGet(context) {
   if (s.payment_status !== 'paid') return json({ error: 'not_paid' }, 402);
   if (s.currency !== CURRENCY || !(s.amount_total >= MIN_AMOUNT)) return json({ error: 'wrong_product' }, 403);
 
-  // Name: the first text custom field the customer filled in; fallback to the billing name.
+  // Name: 1) encoded in client_reference_id by the website ("n_" + base64url(UTF-8));
+  // 2) the first text custom field the customer filled in; 3) the billing name.
   var name = '';
+  var ref = String(s.client_reference_id || '');
+  if (ref.indexOf('n_') === 0) {
+    try {
+      var b64 = ref.slice(2).replace(/-/g, '+').replace(/_/g, '/');
+      while (b64.length % 4) b64 += '=';
+      var bin = atob(b64), bytes = new Uint8Array(bin.length), k;
+      for (k = 0; k < bin.length; k++) bytes[k] = bin.charCodeAt(k);
+      name = new TextDecoder('utf-8').decode(bytes);
+    } catch (e) { name = ''; }
+  }
   (s.custom_fields || []).forEach(function (f) {
     if (!name && f.text && f.text.value) name = f.text.value;
   });
