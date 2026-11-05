@@ -266,12 +266,19 @@ function render(){
 }
 function later(){clearTimeout(timer);timer=setTimeout(render,120)}
 var PAY='https://buy.stripe.com/8x214n4OAeIsafQaIb0x200';
-var PAY_CS='https://buy.stripe.com/14A7sL80MeIs9bM03x0x203';
+var PAY_CS='https://buy.stripe.com/6oU6oHfte1VG9bM5nR0x202';
+function refFor(name){
+ var n=name.replace(/\s+/g,' ').trim().slice(0,40),r;
+ function enc(t){var b=new TextEncoder().encode(t),s='',i;for(i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+ r='n_'+enc(n);
+ while(r.length>190&&n.length>1){n=n.slice(0,-1);r='n_'+enc(n)}
+ return r;
+}
 function mail(){
  var name=input.value.trim();
  var l=document.documentElement.lang||'en';
  if(l==='cs'||l==='en'){
-  buy.href=(l==='cs'?PAY_CS:PAY)+'?client_reference_id='+encodeURIComponent('KB-'+new Date().getFullYear()+'-'+numberFor(name));
+  buy.href=(l==='cs'?PAY_CS:PAY)+'?client_reference_id='+refFor(name);
  }else{
   buy.href='mailto:info@kafkabank.com?subject='+encodeURIComponent('Certificate purchase')+'&body='+encodeURIComponent('Name on the certificate: '+name);
  }
