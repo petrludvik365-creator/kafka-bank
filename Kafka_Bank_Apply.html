@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kafka Bank – Apply</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Caveat:wght@500&display=swap">
+<style>
+:root{--bg:#f7f4ee;--surface:#fff;--ink:#14213d;--muted:#5b6475;--line:#e3ddd0;--accent:#9a7b2f;--navy:#34332f;--navy-ink:#f7f4ee;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1424;--surface:#161e33;--ink:#ece8dd;--muted:#9aa3b8;--line:#263050;--accent:#c9a74e;--navy:#1a1918;--navy-ink:#ece8dd}}
+:root[data-theme="dark"]{--bg:#0e1424;--surface:#161e33;--ink:#ece8dd;--muted:#9aa3b8;--line:#263050;--accent:#c9a74e;--navy:#1a1918;--navy-ink:#ece8dd}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Old Standard TT",Georgia,"Times New Roman",serif;line-height:1.6}
+a{color:inherit;text-decoration:none}
+.mono{font-family:"Old Standard TT",Georgia,"Times New Roman",serif}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header{border-bottom:1px solid var(--line)}
+header .wrap{display:flex;justify-content:space-between;align-items:center;padding-top:18px;padding-bottom:18px;flex-wrap:wrap;gap:10px}
+.logo{font-size:2.2rem;line-height:1.1;letter-spacing:.04em;font-weight:700}
+.logo span{color:var(--accent)}
+nav{display:flex;gap:20px;font-family:"Old Standard TT",Georgia,"Times New Roman",serif;font-size:.9rem;color:var(--muted)}
+.hero{background:var(--navy);border-top:6px solid var(--accent);color:var(--navy-ink);padding:72px 0}
+.hero .ref{font-family:"Old Standard TT",Georgia,"Times New Roman",serif;font-size:.8rem;opacity:.65;margin:0 0 16px;letter-spacing:.1em}
+.hero h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.15;margin:0 0 16px;max-width:16em}
+.hero p{max-width:none;opacity:.85;margin:0;font-size:1.1rem}
+.btn{display:inline-block;background:var(--accent);color:#14213d;padding:12px 26px;font-family:"Old Standard TT",Georgia,"Times New Roman",serif;font-weight:600;border-radius:2px}
+section{padding:60px 0}
+h2{font-size:calc(1.8rem + 3px);margin:0 0 8px}
+.center{text-align:left;margin-bottom:36px}
+.lead{color:var(--muted);margin:0 0 32px;font-family:"Old Standard TT",Georgia,"Times New Roman",serif}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--accent);padding:26px}
+.card h3{margin:0 0 8px;font-size:1.25rem}
+.card p{margin:0 0 14px;color:var(--muted);font-family:"Old Standard TT",Georgia,"Times New Roman",serif;font-size:.95rem}
+.card a{font-family:"Old Standard TT",Georgia,"Times New Roman",serif;font-size:.9rem;color:var(--accent);font-weight:600}
+.card .pic{display:block;width:calc(100% + 52px);margin:-26px -26px 18px;aspect-ratio:16/10;object-fit:cover;object-position:center 45%;border-bottom:1px solid var(--line)}
+.notice{border-left:3px solid var(--accent);padding:4px 0 4px 20px;max-width:34em;font-style:italic;color:var(--muted);margin-top:34px}
+.clients{background:var(--navy);color:var(--navy-ink)}
+.clients h2{text-align:left;margin-bottom:40px}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:28px}
+.client{text-align:center}
+.portrait{display:block;width:150px;height:150px;border-radius:50%;object-fit:cover;margin:0 auto}
+.client .bar{width:56px;height:3px;background:var(--accent);margin:18px auto 14px}
+.client h3{margin:0;font-size:1.15rem}
+.client .yrs{font-size:.85rem;opacity:.65;margin-top:2px}
+.client p{margin:10px 0 0;font-size:.92rem;opacity:.82}
+nav{align-items:center}
+.lang{display:flex;gap:8px}
+.lang button{padding:0;border:1px solid var(--line);background:none;cursor:pointer;width:30px;height:20px;line-height:0;opacity:.55;border-radius:2px;overflow:hidden}
+.lang button[aria-pressed="true"]{opacity:1;outline:2px solid var(--accent);outline-offset:1px}
+.lang svg{width:100%;height:100%;display:block}
+#application{padding-bottom:20px}
+.duo{padding-top:36px}
+.trio{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:20px;align-items:start}
+.mapcol{align-self:stretch;display:flex;flex-direction:column}
+.mapgrp{margin:auto 0}
+.kst{background:var(--navy);color:var(--navy-ink);padding:48px 0 80px}
+.kst h2{margin-bottom:36px}
+.krow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;text-align:center}
+.kstat b{display:block;font-size:3.6rem;line-height:1.1;color:#c9a74e}
+.kstat span{display:block;margin-top:6px;opacity:.85;font-size:1rem}
+.kstat .inf{font-size:7.2rem;height:3.96rem;line-height:3.96rem}
+@media (max-width:760px){.krow{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:28px}}
+.duo p{margin:0 0 16px;max-width:46em}
+.duo .address{font-size:1.05rem;font-weight:700;margin:18px 0 0;text-align:center}
+@media (max-width:760px){.trio{grid-template-columns:1fr}}
+@media (min-width:761px){.trio>div:first-child{padding-right:40px}}
+.duo h2{margin-bottom:36px}
+.map{background:#f7f4ee;width:min(240px,100%);margin:0 auto;position:relative}
+.map .pin{position:absolute;left:50%;top:calc(50% + 10px);width:16px;height:16px;transform:translate(-50%,-50%);border-radius:50%;background:#c9a74e;box-shadow:0 0 0 2px rgba(20,33,61,.55)}
+.map img{display:block;width:100%;max-width:300px;aspect-ratio:1/1;height:auto;object-fit:cover;border-radius:50%}
+footer{padding:36px 0;color:var(--muted);font-family:"Old Standard TT",Georgia,"Times New Roman",serif;font-size:.85rem}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:28px}
+.partner{text-align:center}
+.logo-slot{height:130px;display:flex;align-items:center;justify-content:center;background:var(--surface);border:1px dashed var(--line);color:var(--muted);font-size:.8rem;letter-spacing:.14em}
+.logo-slot img{max-width:80%;max-height:80%}
+.partner h3{margin:16px 0 6px;font-size:1.25rem}
+.partner p{margin:0;color:var(--muted);font-size:.95rem}
+.msg.ok{color:var(--ink)}footer{padding:36px 0;color:var(--muted);font-family:"Old Standard TT",Georgia,"Times New Roman",serif;font-size:.78rem}
+.logo-slot{height:auto;background:none;border:0;padding:0}.logo-slot img{width:min(204px,68%);max-width:none;max-height:none;height:auto;aspect-ratio:1/1;border-radius:50%;display:block}
+#partners h2{margin-bottom:44px}
+.item{display:grid;grid-template-columns:calc((100% - 40px)*.3182) minmax(0,1fr);gap:40px;align-items:center;padding:40px 0;border-bottom:1px solid var(--line)}
+.item:first-child{padding-top:0}.item:last-child{border-bottom:0;padding-bottom:0}
+.item .pic{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;object-position:center 45%;border:1px solid var(--line);border-top:3px solid var(--accent)}
+.item h3{margin:0 0 12px;font-size:1.7rem}
+.item p{margin:0 0 14px;color:var(--muted);font-size:1.02rem}
+.item .more{color:var(--ink);font-style:italic}
+@media (max-width:760px){.item{grid-template-columns:1fr;gap:20px}.item .pic{width:70%}}
+#accounts .pic{aspect-ratio:3/2;object-position:center}
+.item .pic{cursor:zoom-in}
+#lb{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;background:rgba(10,10,10,.88);padding:20px;cursor:zoom-out}
+#lb.open{display:flex}
+#lb img{max-width:100%;max-height:100%;object-fit:contain;box-shadow:0 10px 40px rgba(0,0,0,.6);background:#fff}
+#lb button{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:18px;width:42px;height:42px;border:0;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;font-size:28px;line-height:1;cursor:pointer}
+.frm{max-width:760px;margin:24px 0 0;border:1px solid var(--line);border-top:3px solid var(--accent)}
+.frm .row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:16px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--line)}
+.frm .hrow{background:var(--navy);color:var(--navy-ink);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.8rem}
+.frm .lbl{font-weight:600}
+.frm .val{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:1.08rem;padding:4px 2px;border-bottom:1px dotted var(--muted,#888)}
+.frm input,.frm textarea{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--line);background:transparent;color:inherit;font:inherit;border-radius:2px}
+.frm ::placeholder{font-style:italic;opacity:.6}
+.frm input:focus,.frm textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+.frm .act{padding:18px;display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.frm button{padding:11px 24px;border:0;background:var(--navy);color:var(--navy-ink);font:inherit;font-weight:700;letter-spacing:.04em;cursor:pointer}
+.frm .note{margin:0;font-style:italic}
+@media (max-width:600px){.frm .row{grid-template-columns:1fr;gap:6px}.frm .hrow{display:none}}
+.frm-act{max-width:760px;margin:24px 0 0;display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.frm-act button{padding:12px 32px;border:0;background:var(--navy);color:var(--navy-ink);font:inherit;font-weight:700;letter-spacing:.04em;cursor:pointer}
+.frm-act .note{margin:0;font-style:italic}
+#application .intro{max-width:760px;margin:-12px 0 0;color:var(--muted)}
+/* formulář v duchu roku 1900 */
+.frm{position:relative;max-width:760px;margin:28px 0 0;padding:44px 34px 38px;border:1px solid #5b4a32;outline:3px double #5b4a32;outline-offset:-11px;color:#2b2217;font-family:"Old Standard TT",Georgia,"Times New Roman",serif;background:radial-gradient(ellipse at 50% 35%,rgba(255,251,238,.6),rgba(122,88,44,.2) 100%),repeating-linear-gradient(0deg,rgba(90,60,20,.04) 0 1px,transparent 1px 3px),#ebe0c4;box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 14px 30px rgba(0,0,0,.25)}
+.frm::before{content:"№ 1900";position:absolute;top:19px;right:36px;font-size:.74rem;letter-spacing:.16em;color:#8a2b2b}
+.frm::after{content:"§";position:absolute;right:34px;bottom:26px;width:82px;height:82px;display:flex;align-items:center;justify-content:center;border:3px double #9b2c2c;border-radius:50%;color:#9b2c2c;font-size:2.4rem;transform:rotate(-14deg);opacity:.55;mix-blend-mode:multiply;pointer-events:none}
+.frm .row{grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:0;align-items:end;padding:12px 4px 8px;background:none;border-bottom:1px solid rgba(91,74,50,.55)}
+.frm .hrow{align-items:center;padding:9px 4px;color:#2b2217;background:none;border-top:2px solid #5b4a32;border-bottom:4px double #5b4a32;text-align:center;font-weight:700;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase}
+.frm .lbl{font-weight:700;font-size:.98rem;letter-spacing:.03em;font-variant:small-caps;padding-right:14px}
+.frm .val{font-family:Caveat,"Segoe Script","Bradley Hand","Lucida Handwriting",cursive;font-style:normal;font-weight:500;font-size:1.55rem;line-height:1.05;color:#1c2b66;text-shadow:0 0 1px rgba(28,43,102,.4);padding:0 0 0 16px;border:0;border-left:1px solid rgba(91,74,50,.55);transform:rotate(-.9deg);transform-origin:left center}
+.frm .row:nth-child(even) .val{transform:rotate(.6deg)}
+.frm-act button{padding:11px 36px;border:3px double #5b4a32;background:#ebe0c4;color:#2b2217;font-family:"Old Standard TT",Georgia,serif;font-weight:700;font-size:.92rem;letter-spacing:.14em;text-transform:uppercase;box-shadow:0 3px 8px rgba(0,0,0,.2)}
+.frm-act button:hover{background:#e1d3ac}
+.frm-act .note{font-family:Caveat,"Segoe Script",cursive;font-style:normal;font-size:1.35rem;color:#9b2c2c;transform:rotate(-1deg)}
+@media (max-width:600px){.frm{padding:40px 18px 80px}.frm .hrow{display:none}.frm .row{grid-template-columns:1fr;gap:2px;align-items:start}.frm .val{border-left:0;padding-left:0;font-size:1.45rem}.frm::after{width:62px;height:62px;font-size:1.8rem;right:20px;bottom:18px}}
+.frm-act{flex-direction:column;align-items:flex-start;gap:14px}
+.frm-act button:disabled{opacity:.65;cursor:default;background:#ebe0c4}
+.frm-logo{text-align:center;font-family:"Old Standard TT",Georgia,serif;font-weight:700;font-size:2.3rem;letter-spacing:.14em;line-height:1.1;color:#2b2217;margin:6px 0 22px}
+.frm-logo span{color:#8a2b2b}
+.frm-logo::after{content:"";display:block;width:96px;height:1px;background:#5b4a32;margin:12px auto 0}
+@media (max-width:600px){.frm-logo{font-size:1.7rem}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<a class="logo" href="index.html">KAFKA<span> BANK</span></a>
+<nav><a href="#" onclick="return false">Fictional satirical institution</a><div class="lang"><button type="button" data-l="en" aria-label="English" aria-pressed="true"><svg viewBox="0 0 60 40"><rect width="60" height="40" fill="#012169"/><path d="M0 0L60 40M60 0L0 40" stroke="#fff" stroke-width="8"/><path d="M0 0L60 40M60 0L0 40" stroke="#c8102e" stroke-width="3"/><path d="M30 0V40M0 20H60" stroke="#fff" stroke-width="12"/><path d="M30 0V40M0 20H60" stroke="#c8102e" stroke-width="7"/></svg></button><button type="button" data-l="de" aria-label="Deutsch" aria-pressed="false"><svg viewBox="0 0 30 20"><rect width="30" height="7" fill="#000"/><rect y="7" width="30" height="6.5" fill="#dd0000"/><rect y="13.5" width="30" height="6.5" fill="#ffce00"/></svg></button><button type="button" data-l="cs" aria-label="Čeština" aria-pressed="false"><svg viewBox="0 0 30 20"><rect width="30" height="10" fill="#fff"/><rect y="10" width="30" height="10" fill="#d7141a"/><path d="M0 0L15 10L0 20z" fill="#11457e"/></svg></button></div></nav>
+</div></header>
+
+<div class="hero" id="top"><div class="wrap">
+<p class="ref">FILE NO. K-1914 / PRAGUE / EST. 1892</p>
+<h1>Creating an application.</h1>
+<p>For over a century we have guided clients through the finest corridors of finance.<br>We believe financial certainty begins with proper documentation.<br>Welcome to Kafka Bank.</p>
+</div></div>
+
+<section id="application"><div class="wrap">
+<h2 class="center">Preliminary application for an account/loan (free of charge)</h2>
+<p class="intro">This preliminary application serves to record your interest in the possible future submission of an application in the selected financial matter. Upon its receipt, your eligibility to seek the right to submit a binding application may be assessed in one of the following administrative periods. Submitting this form does not guarantee the initiation of proceedings, admission to proceedings, or notification of whether proceedings are necessary.<br><br><strong>Notice:</strong> An unfilled application will be assessed within a period of 30 to 300 working months. Should it be necessary to supplement unfilled data, the applicant will be promptly invited to leave them further unfilled.</p>
+<div class="frm">
+<div class="frm-logo" aria-label="Kafka Bank">KAFKA<span> BANK</span></div>
+<div class="row hrow"><span class="hd">Item</span><span class="hd">Entry</span></div>
+<div class="row"><span class="lbl">1. Full name</span><span class="val">Authorized person</span></div>
+<div class="row"><span class="lbl">2. Date of birth</span><span class="val">Recorded</span></div>
+<div class="row"><span class="lbl">3. Place of birth</span><span class="val">On file</span></div>
+<div class="row"><span class="lbl">4. Residential address</span><span class="val">Documented</span></div>
+<div class="row"><span class="lbl">5. Purpose of application</span><span class="val">Option to submit an application</span></div>
+<div class="row"><span class="lbl">6. Applicant’s signature</span><span class="val">Done</span></div>
+<div class="row"><span class="lbl">7. Date of submission</span><span class="val">Registered</span></div>
+</div>
+<div class="frm-act"><button type="button" id="sendbtn">Submit</button><p class="note" role="status" hidden>Your application has been received. Receipt does not constitute confirmation of receipt.</p></div>
+</div></section>
+
+<footer><div class="wrap">© Kafka Bank · Ref. K-1914/∞ · All rights reserved, and some reserved in advance.</div></footer>
+
+
+<script>
+(function(){
+var SEL='nav a, .hero .ref, .hero h1, .hero p, #application h2, #application .intro, #application .hd, #application .lbl, #application .val, #application button, #application .note, footer .wrap';
+var els=Array.prototype.slice.call(document.querySelectorAll(SEL));
+var T={en:els.map(function(e){return e.innerHTML}),de:["Fiktive satirische Institution", "AKTENZEICHEN K-1914 / PRAG / GEGR. 1892", "Erstellung eines Antrags.", "Seit über einem Jahrhundert führen wir unsere Kunden durch die feinsten Korridore der Finanzwelt.<br>Wir glauben, dass finanzielle Sicherheit mit ordnungsgemäßer Dokumentation beginnt.<br>Willkommen bei der Kafka Bank.", "Vorläufiger Antrag auf Konto/Kredit (kostenlos)", "Dieser vorläufige Antrag dient der Erfassung Ihres Interesses an der künftigen Einreichung eines etwaigen Antrags in der gewählten Finanzangelegenheit. Nach seinem Eingang kann in einem der folgenden Verwaltungszeiträume Ihre Eignung geprüft werden, sich um das Recht zur Einreichung eines verbindlichen Antrags zu bewerben. Das Absenden dieses Formulars garantiert weder die Einleitung eines Verfahrens noch die Zulassung zum Verfahren noch die Mitteilung, ob ein Verfahren erforderlich ist.<br><br><strong>Belehrung:</strong> Ein nicht ausgefüllter Antrag wird innerhalb einer Frist von 30 bis 300 Arbeitsmonaten geprüft. Sollte eine Ergänzung nicht ausgefüllter Angaben erforderlich sein, wird der Antragsteller unverzüglich aufgefordert, diese weiterhin nicht auszufüllen.", "Angabe", "Eintrag", "1. Vor- und Nachname", "Berechtigte Person", "2. Geburtsdatum", "Verzeichnet", "3. Geburtsort", "In Evidenz", "4. Wohnanschrift", "Belegt", "5. Zweck des Antrags", "Möglichkeit, einen Antrag zu stellen", "6. Unterschrift des Antragstellers", "Geleistet", "7. Einreichungsdatum", "Registriert", "Absenden", "Ihr Antrag ist eingegangen. Der Eingang stellt keine Eingangsbestätigung dar.", "© Kafka Bank · Az. K-1914/∞ · Alle Rechte vorbehalten, einige davon im Voraus."],cs:["Fiktivní satirická instituce", "SPIS. ZN. K-1914 / PRAHA / ZALOŽENO 1892", "Vytvoření žádosti.", "Již více než sto let provázíme klienty nejjemnějšími chodbami financí.<br>Věříme, že finanční jistota začíná řádnou dokumentací.<br>Vítejte v Kafka Bank.", "Předběžná žádost o účet/úvěr (bezplatná)", "Tato předběžná žádost slouží k zaznamenání Vašeho zájmu o budoucí podání případné žádosti ve zvolené finanční záležitosti. Po jejím přijetí může být v některém z následujících administrativních období posouzena Vaše způsobilost ucházet se o právo podat závaznou žádost. Odeslání tohoto formuláře nezaručuje vznik řízení, přijetí k řízení ani sdělení, zda je řízení nezbytné.<br><br><strong>Poučení:</strong> Nevyplněná žádost bude posouzena ve lhůtě 30 až 300 pracovních měsíců. V případě potřeby doplnění nevyplněných údajů bude žadatel neprodleně vyzván k jejich dalšímu nevyplnění.", "Údaj", "Vyplnění", "1. Jméno a příjmení", "Oprávněná osoba", "2. Datum narození", "Zaznamenáno", "3. Místo narození", "V evidenci", "4. Adresa bydliště", "Doložena", "5. Účel žádosti", "Možnost podat žádost", "6. Podpis žadatele", "Učiněn", "7. Datum podání", "Zaevidováno", "Odeslat", "Vaše žádost byla přijata. Přijetí nepředstavuje potvrzení přijetí.", "© Kafka Bank · Č. j. K-1914/∞ · Všechna práva vyhrazena, některá předem."]};
+if(els.length!==T.de.length||els.length!==T.cs.length)return;
+var btns=document.querySelectorAll('.lang button');
+function set(l){
+ els.forEach(function(e,i){e.innerHTML=T[l][i]});
+ var sb=document.getElementById('sendbtn');if(sb&&sb.getAttribute('data-sent')){sb.innerHTML={en:'Sent',de:'Gesendet',cs:'Odesláno'}[l]}
+ document.documentElement.lang=l;
+ btns.forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-l')===l?'true':'false')});
+ try{localStorage.setItem('kb-lang',l)}catch(e){}
+}
+btns.forEach(function(b){b.addEventListener('click',function(){set(b.getAttribute('data-l'))})});
+try{var s=localStorage.getItem('kb-lang');if(s&&T[s]&&s!=='en')set(s)}catch(e){}
+})();
+</script>
+
+
+<script>
+(function(){
+var b=document.getElementById('sendbtn');
+b.addEventListener('click',function(){var l=document.documentElement.lang||'en';b.parentNode.querySelector('.note').hidden=false;b.setAttribute('data-sent','1');b.disabled=true;b.innerHTML={en:'Sent',de:'Gesendet',cs:'Odesláno'}[l]||'Sent'});
+})();
+</script>
+</body>
+</html>
