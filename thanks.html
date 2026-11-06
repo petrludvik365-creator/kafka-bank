@@ -41,12 +41,8 @@ p{margin:0 0 16px}
 (function(){
 var L={
 en:{title:'Thank you',loading:'Verifying your payment…',lead:'Your payment has been verified. Your certificate is ready.',dl:'Download PDF',note:'Keep this page address to download the certificate again.',back:'Back to Kafka Bank',bad:'This link is not valid.',unpaid:'We could not confirm this payment. If you have paid, please write to info@kafkabank.com.',fail:'Something went wrong. Please try again or write to info@kafkabank.com.'},
-de:{title:'Vielen Dank',loading:'Ihre Zahlung wird überprüft…',lead:'Ihre Zahlung wurde bestätigt. Ihr Zertifikat ist bereit.',dl:'PDF herunterladen',note:'Speichern Sie die Adresse dieser Seite, um das Zertifikat erneut herunterzuladen.',back:'Zurück zur Kafka Bank',bad:'Dieser Link ist nicht gültig.',unpaid:'Wir konnten diese Zahlung nicht bestätigen. Falls Sie bezahlt haben, schreiben Sie an info@kafkabank.com.',fail:'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder schreiben Sie an info@kafkabank.com.'},
-fr:{title:'Merci',loading:'Vérification de votre paiement…',lead:'Votre paiement a été vérifié. Votre certificat est prêt.',dl:'Télécharger le PDF',note:'Conservez l’adresse de cette page pour télécharger à nouveau le certificat.',back:'Retour à la Kafka Bank',bad:'Ce lien n’est pas valide.',unpaid:'Nous n’avons pas pu confirmer ce paiement. Si vous avez payé, écrivez à info@kafkabank.com.',fail:'Une erreur est survenue. Veuillez réessayer ou écrire à info@kafkabank.com.'},
-cs:{title:'Děkujeme',loading:'Ověřujeme platbu…',lead:'Platba byla ověřena. Váš certifikát je připraven.',dl:'Stáhnout PDF',note:'Adresu této stránky si uložte, certifikát si tak můžete stáhnout znovu.',back:'Zpět na Kafka Bank',bad:'Tento odkaz není platný.',unpaid:'Platbu se nepodařilo potvrdit. Pokud jste zaplatili, napište na info@kafkabank.com.',fail:'Něco se nepovedlo. Zkuste to znovu nebo napište na info@kafkabank.com.'}
 };
 var lang='en';
-try{var s=localStorage.getItem('kb-lang');if(s&&L[s])lang=s;else{var n=(navigator.language||'en').slice(0,2);if(L[n])lang=n}}catch(e){}
 var T=L[lang];document.documentElement.lang=lang;
 function $(id){return document.getElementById(id)}
 $('t-title').textContent=T.title;$('t-lead').textContent=T.lead;$('dl').textContent=T.dl;$('t-note').textContent=T.note;$('t-back').textContent=T.back;$('status').textContent=T.loading;
