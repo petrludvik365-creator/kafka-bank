@@ -245,7 +245,7 @@ function render(){
  thumb.src=cv.toDataURL('image/jpeg',0.9);
 }
 function later(){clearTimeout(timer);timer=setTimeout(render,120)}
-var PAY='https://buy.stripe.com/8x214n4OAeIsafQaIb0x200';
+var PAY='https://buy.stripe.com/5kQ3cv2Gs8k43RseYr0x204';
 function mail(){
  var name=input.value.trim();
  buy.href=PAY+'?client_reference_id='+encodeURIComponent('KB-'+new Date().getFullYear()+'-'+numberFor(name));
